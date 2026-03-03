@@ -1,0 +1,115 @@
+{
+  "evals": [
+    {
+      "id": "generate-01",
+      "mode": "generate",
+      "description": "シンプルなchatflowのDSL生成",
+      "input": "テキスト入力を受け取り、LLMで要約してユーザーに返すシンプルなChatflowのDSLを作って",
+      "criteria": [
+        "app.mode が advanced-chat である",
+        "startノードにparagraph型のvariableが含まれる",
+        "llmノードのprompt_templateにsystemとuserロールがある",
+        "answerノードがLLMのtext変数を参照している",
+        "エッジIDが {sourceId}-source-{targetId}-target 形式である",
+        "全ノードにpositionAbsoluteフィールドがある",
+        "全ノードにselected: falseがdataレベルとノードレベルの両方にある",
+        "answerノードのheightが143である",
+        "YAML形式として正しく解析できる"
+      ]
+    },
+    {
+      "id": "generate-02",
+      "description": "If-Else条件分岐を含むワークフロー生成",
+      "mode": "generate",
+      "input": "ユーザーの入力をLLMで分析し、ポジティブな内容なら'ありがとう'と返し、ネガティブな内容なら'申し訳ありません'と返すワークフローのDSLを作って",
+      "criteria": [
+        "app.mode が workflow または advanced-chat である",
+        "if-elseノードが含まれる",
+        "if-elseノードから2つのエッジが出ている（case1とfalse）",
+        "case1のsourceHandleがcase1である",
+        "falseブランチのsourceHandleがfalseである",
+        "両方のブランチが最終的にanswerノードに接続される",
+        "YAML形式として正しく解析できる"
+      ]
+    },
+    {
+      "id": "edit-01",
+      "mode": "edit",
+      "description": "既存DSLへのノード追加",
+      "input": "以下のDSLにParameter Extractorノードを追加して、LLMの出力からコードブロックのみを抽出するようにしてください。\n\n```yaml\napp:\n  description: ''\n  icon: 🤖\n  icon_background: '#FFEAD5'\n  mode: advanced-chat\n  name: コード生成\n  use_icon_as_answer_icon: false\ndependencies: []\nkind: app\nversion: 0.3.0\nworkflow:\n  conversation_variables: []\n  environment_variables: []\n  features:\n    file_upload:\n      enabled: false\n    speech_to_text:\n      enabled: false\n    text_to_speech:\n      enabled: false\n  graph:\n    edges:\n    - data:\n        isInIteration: false\n        isInLoop: false\n        sourceType: start\n        targetType: llm\n      id: start-source-llm1-target\n      source: start\n      sourceHandle: source\n      target: llm1\n      targetHandle: target\n      type: custom\n      zIndex: 0\n    - data:\n        isInIteration: false\n        isInLoop: false\n        sourceType: llm\n        targetType: answer\n      id: llm1-source-answer-target\n      source: llm1\n      sourceHandle: source\n      target: answer\n      targetHandle: target\n      type: custom\n      zIndex: 0\n    nodes:\n    - data:\n        desc: ''\n        selected: false\n        title: 開始\n        type: start\n        variables:\n        - label: 要件\n          max_length: 1000\n          options: []\n          required: true\n          type: paragraph\n          variable: requirement\n      height: 90\n      id: start\n      position:\n        x: 80\n        y: 282\n      positionAbsolute:\n        x: 80\n        y: 282\n      selected: false\n      sourcePosition: right\n      targetPosition: left\n      type: custom\n      width: 244\n    - data:\n        context:\n          enabled: false\n          variable_selector: []\n        desc: ''\n        model:\n          completion_params:\n            temperature: 0.7\n          mode: chat\n          name: claude-sonnet-4-6\n          provider: anthropic\n        prompt_template:\n        - id: sys-001\n          role: system\n          text: Pythonコードを生成してください\n        - id: usr-001\n          role: user\n          text: '{{#start.requirement#}}'\n        selected: false\n        title: コード生成LLM\n        type: llm\n        variables: []\n        vision:\n          enabled: false\n      height: 90\n      id: llm1\n      position:\n        x: 380\n        y: 282\n      positionAbsolute:\n        x: 380\n        y: 282\n      selected: false\n      sourcePosition: right\n      targetPosition: left\n      type: custom\n      width: 244\n    - data:\n        answer: '{{#llm1.text#}}'\n        desc: ''\n        selected: false\n        title: 回答\n        type: answer\n        variables: []\n      height: 143\n      id: answer\n      position:\n        x: 680\n        y: 282\n      positionAbsolute:\n        x: 680\n        y: 282\n      selected: false\n      sourcePosition: right\n      targetPosition: left\n      type: custom\n      width: 244\n    viewport:\n      x: 0\n      y: 0\n      zoom: 1\n```",
+      "criteria": [
+        "parameter-extractorノードが追加されている",
+        "parameter-extractorのqueryが['llm1', 'text']形式（配列形式）である",
+        "parameter-extractorのqueryが {role, text} 形式でない",
+        "llm1 → parameter-extractor のエッジが存在する",
+        "parameter-extractor → answer のエッジが存在する",
+        "llm1 → answer の直接エッジが削除されている",
+        "answerノードがparameter-extractorの出力変数を参照している",
+        "YAML形式として正しく解析できる"
+      ]
+    },
+    {
+      "id": "edit-02",
+      "mode": "edit",
+      "description": "既存DSLのモデル変更",
+      "input": "以下のDSLのLLMノードのモデルをgpt-4（openai）からclaude-sonnet-4-6（anthropic）に変更して",
+      "criteria": [
+        "LLMノードのmodel.nameがclaude-sonnet-4-6に変更されている",
+        "LLMノードのmodel.providerがanthropicに変更されている",
+        "その他のノードやエッジに変更がない",
+        "YAML形式として正しく解析できる"
+      ]
+    },
+    {
+      "id": "validate-01",
+      "mode": "validate",
+      "description": "エラーのないDSLの検証",
+      "input": "以下のDSLを検証してください。\n\n（simple-chatflow.ymlの内容）",
+      "criteria": [
+        "バリデーションチェックリストを実行している",
+        "重大なエラーなしと判定する",
+        "positionAbsoluteの存在を確認している",
+        "エッジIDフォーマットを確認している",
+        "変数参照の形式を確認している"
+      ]
+    },
+    {
+      "id": "validate-02",
+      "mode": "validate",
+      "description": "複数エラーを含むDSLの検証",
+      "input": "以下のDSLを検証してください。問題があれば指摘してください。\n\n```yaml\napp:\n  mode: advanced-chat\n  name: テスト\nkind: app\nversion: 0.3.0\nworkflow:\n  graph:\n    edges:\n    - id: start_to_llm\n      source: start\n      sourceHandle: source\n      target: llm1\n      targetHandle: target\n      type: custom\n    nodes:\n    - data:\n        type: start\n        variables:\n        - variable: query\n          type: paragraph\n      id: start\n      position:\n        x: 100\n        y: 300\n      type: custom\n      width: 244\n    - data:\n        type: llm\n        model:\n          name: gpt-4\n          provider: openai\n          mode: chat\n        prompt_template:\n        - role: user\n          text: '{{query}}'\n      id: llm1\n      position:\n        x: 400\n        y: 300\n      type: custom\n```",
+      "criteria": [
+        "positionAbsoluteが欠落していることを指摘する",
+        "エッジIDのフォーマットが誤り（start_to_llmではなくstart-source-llm1-targetが正しい）を指摘する",
+        "変数参照の形式が誤り（{{query}}ではなく{{#start.query#}}が正しい）を指摘する",
+        "answerノードが欠落していることを指摘する",
+        "selected: falseが欠落していることを指摘する",
+        "修正方法を提示する"
+      ]
+    },
+    {
+      "id": "reference-01",
+      "mode": "reference",
+      "description": "Parameter Extractorノードの書き方の参照",
+      "input": "Parameter Extractorノードのqueryフィールドはどのように書けばいいですか？",
+      "criteria": [
+        "queryフィールドが配列形式（['nodeId', 'varName']）であることを説明する",
+        "{role, text}形式は誤りであることを明示する",
+        "具体的なYAML例を示す",
+        "node-reference.mdの情報に基づいている"
+      ]
+    },
+    {
+      "id": "reference-02",
+      "mode": "reference",
+      "description": "If-Elseノードの分岐エッジの書き方の参照",
+      "input": "If-Elseノードの条件分岐のエッジはどう設定しますか？trueとfalseの場合で違いはありますか？",
+      "criteria": [
+        "case1（真）のsourceHandleが'case1'であることを説明する",
+        "falseブランチのsourceHandleが'false'であることを説明する",
+        "具体的なYAML例を示す",
+        "elseは'else'ではなく'false'であることを明示する"
+      ]
+    }
+  ]
+}
