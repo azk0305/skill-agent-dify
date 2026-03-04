@@ -485,3 +485,4 @@ height: 143
 - **ノード設定の詳細仕様**: [references/node-reference.md](./references/node-reference.md)
 - **最小構成の例（Start→LLM→Answer）**: [examples/simple-chatflow.yml](./examples/simple-chatflow.yml)
 - **条件分岐を含む複合例**: [examples/data-query-workflow.yml](./examples/data-query-workflow.yml)
+- **人的介入（Human Input）ノードの使用例**: [examples/human-input-workflow.yml](./examples/human-input-workflow.yml)
