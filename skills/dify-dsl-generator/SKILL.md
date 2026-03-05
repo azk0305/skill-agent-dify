@@ -7,7 +7,6 @@ description: >
   - 既存のDSLを編集・ノード追加・修正したい（「このDSLに〜を追加して」「〜ノードを変更して」）
   - DSLの構文チェックやバリデーションをしたい（「このDSLを確認して」「検証して」）
   - 特定ノードの設定方法・フィールドを確認したい（「〜ノードの書き方は？」「〜フィールドの意味は？」）
-version: 2.0.0
 ---
 
 # Dify DSL ジェネレーター
@@ -483,6 +482,7 @@ height: 143
 ## 詳細参照先
 
 - **ノード設定の詳細仕様**: [references/node-reference.md](./references/node-reference.md)
+- **公式ドキュメントを分析して得たDSLの仕様**: [references/dsl-analysis.md](./references/dsl-analysis.md)
 - **最小構成の例（Start→LLM→Answer）**: [examples/simple-chatflow.yml](./examples/simple-chatflow.yml)
 - **条件分岐を含む複合例**: [examples/data-query-workflow.yml](./examples/data-query-workflow.yml)
 - **人的介入（Human Input）ノードの使用例**: [examples/human-input-workflow.yml](./examples/human-input-workflow.yml)
